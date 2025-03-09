@@ -20,13 +20,13 @@ $(NAME): $(OBJS)
 test: re
 	@echo "---------- Test 0 result: ---------------"
 	@./$(NAME) tests/test0.txt
-	@echo -n "\n"
+	@echo ""
 	@echo "---------- Test 1 result: ---------------"
 	@./$(NAME) tests/test1.txt
-	@echo -n "\n"
+	@echo ""
 	@echo "---------- Test 2 result: ---------------"
 	@./$(NAME) tests/test2.txt
-	@echo -n "\n"
+	@echo ""
 
 clean:
 	@rm -f $(OBJS)
