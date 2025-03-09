@@ -113,7 +113,7 @@ int	ft_col_count_calculate(bsq_map_d *mapData ,char *file_name, int is_stdin)
 
 	j = 0;
 	i = -1;
-	if (is_stdin == 0)
+	if (is_stdin)
 	{
 		fd = STDIN_FILENO;
 	} else 
@@ -195,6 +195,7 @@ int	main(int argc, char **argv)
 				continue ;
 			}
 		}
+		printf("%d\n", mapData.col_len);
 		// if (ft_read_map(&mapData, fd) == 0)
 		// {
 		// 	ft_puterr("map error\n");
