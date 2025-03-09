@@ -1,4 +1,4 @@
-SRCS = main.c ft_process_map.c
+SRCS = main.c extra_func.c read_map.c
 OBJS = $(SRCS:.c=.o)
 
 NAME = bsq
@@ -9,20 +9,28 @@ CCFLAGS = -Wall -Wextra -Werror
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(CCFLAGS) $(OBJS) -o $(NAME)
+	@# $(CC) $(CCFLAGS) $(OBJS) -o $(NAME)
+	@$(CC) $(OBJS) -o $(NAME)
+	@echo "Derlendi!"
 
-main.o: main.c
-	$(CC) $(CCFLAGS) -c main.c -o main.o
+%.o: %.c
+	@$(CC) -c $< -o $@
+	@# $(CC) -c $(CCFLAGS) $< -o $@
 
-ft_process_map.o: ft_process_map.c
-	$(CC) $(CCFLAGS) -c ft_process_map.c -o ft_process_map.o
+test:
+	@echo "---------- Test 0 result: ---------------"
+	@./$(NAME) tests/test0.txt
+	@echo "---------- Test 1 result: ---------------"
+	@./$(NAME) tests/test1.txt
+	@echo "---------- Test 2 result: ---------------"
+	@./$(NAME) tests/test2.txt
 
 clean:
-	rm -f $(OBJS)
+	@rm -f $(OBJS)
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: fclean all
 
-.PHONY: all clean fclean
+.PHONY: all clean fclean test
