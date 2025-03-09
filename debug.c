@@ -1,5 +1,4 @@
 #include "bsq.h"
-#include <stdio.h>
 
 void print_map_data(const bsq_map_d *map) {
     if (map == NULL) {

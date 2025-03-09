@@ -1,5 +1,4 @@
 #include "bsq.h"
-#include "bsq.h"
 
 void ft_reset_mapData(bsq_map_d *map_info)
 {

@@ -1,6 +1,4 @@
 #include "bsq.h"
-#include <stdlib.h>
-#include <fcntl.h>
 
 int	ft_check_first_line(bsq_map_d *map_info, char *first_line)
 {
