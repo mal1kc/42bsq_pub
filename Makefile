@@ -1,4 +1,4 @@
-SRCS = main.c extra_func.c read_map.c
+SRCS = main.c extra_func.c reading.c debug.c
 OBJS = $(SRCS:.c=.o)
 
 NAME = bsq
