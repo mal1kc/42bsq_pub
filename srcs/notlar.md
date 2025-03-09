@@ -9,8 +9,10 @@ kısımlardaki sayılar space ile engeller ise opstacle ile doldurulması lazım
 * Oluşturulan sonuç ekrana yazdırılması lazım
 
 # Aşamalar:
-* Kolon sayısı hesaplanması lazım
+* Kolon sayısı hesaplanması lazım [x]
 * char **map_data içerisine bilgiler doğru bir şekilde kaydedilmesi lazım
+	*map_data hariç hepsi tamam
 * char **map_data içeriği 0, 1 şeklinde sayılarla değiştirilmesi lazım
 * char **map_data'daki en büyük kare belirlenmesi lazım
 * en büyük kare dışındaki yerler boş veya engel, en büyük kare içerisi full karakteri olması lazım
+* Makefile, reset fonksiyonu güncellenmesi lazım

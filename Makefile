@@ -17,7 +17,7 @@ $(NAME): $(OBJS)
 	@$(CC) -c $< -o $@
 	@# $(CC) -c $(CCFLAGS) $< -o $@
 
-test:
+test: re
 	@echo "---------- Test 0 result: ---------------"
 	@./$(NAME) tests/test0.txt
 	@echo "---------- Test 1 result: ---------------"
