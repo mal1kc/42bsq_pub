@@ -16,6 +16,7 @@ void ft_reset_mapData(bsq_map_d *mapData)
 		mapData->map_data = NULL;		
 	}
 	
+	mapData->map_start_index = -1;
 	mapData->col_len = -1;
 	mapData->line_len = -1;
 	mapData->file_name = "";
@@ -105,14 +106,18 @@ int	ft_read_map(bsq_map_d *mapData, int fd)
 
 int	ft_col_count_calculate(bsq_map_d *mapData ,char *file_name, int is_stdin)
 {
+	/*
+	ilk satır okunacak
+	map_start_index belirlenecek
+	kolon sayısı bulunacak
+	*/
 	int	fd;
 	char buffer[100];
-	int bytes_read;
-	int i;
-	int j;
+	int rb;
+	int rbi;
+	t_bool is_first;
+	t_bool r_finish;
 
-	j = 0;
-	i = -1;
 	if (is_stdin)
 	{
 		fd = STDIN_FILENO;
@@ -122,34 +127,39 @@ int	ft_col_count_calculate(bsq_map_d *mapData ,char *file_name, int is_stdin)
 		if (fd == -1)
 			return (0);
 	}
-	while (j != -1)
-	{
-		bytes_read = read(fd, buffer, (sizeof(buffer) - 1));
-		// write(1, "calisti", 7);
-		if (bytes_read <= 0)
-			return (0);
-		buffer[bytes_read] = '\0';
-		printf("%s\n", buffer);
-		j = 0;
-		while (buffer[j])
-		{
-			if (buffer[j] == '\n' && i == -1)
-					i = 0;
-			if (i != -1 && buffer[j] != '\n')
-				i++;
-			if (buffer[j] == '\n' && i != -1)
-			{
-				j = -1;
-				break ;
-			}
-			j++;
-		}
 
-		if (bytes_read < (int)(sizeof(buffer) -1) )
-            break;
+	rb = 0;
+	rbi = 0;
+	r_finish = false;
+	is_first = true;
+	mapData->map_start_index = 0;
+	mapData->col_len = 0;
+	while (!r_finish)
+	{
+		rb = read(fd, buffer, sizeof(buffer) - 1);
+		if (rb <= 0)
+			break;
+		buffer[rb] = '\0';
+		while (buffer[rbi])
+		{
+			if (is_first == true && buffer[rbi] != '\n')
+				mapData->map_start_index++;
+			if (is_first == false && buffer[rbi] != '\n')
+				mapData->col_len++;
+			if (is_first == false && buffer[rbi] == '\n')
+			{
+				r_finish = true;
+				break;
+			}
+			if (buffer[rbi] == '\n' && is_first == true)
+				is_first = false;
+			rbi++;
+		}
 	}
 
-	mapData->col_len = i;
+	if (mapData->col_len <= 0 || mapData->map_start_index < MIN_LEN_FLINE)
+		return (0);
+	
 	close(fd);
 	return (1);
 }
@@ -159,7 +169,7 @@ int	main(int argc, char **argv)
 	bsq_map_d mapData;
 	int	fd;
 	int i;
-	int temp;
+	int return_status;
 
 	/*
 	test0: col=7, line=7
@@ -175,35 +185,45 @@ int	main(int argc, char **argv)
 		if (argc > 1) // dosya okuma işlemleri
 		{
 			mapData.file_name = argv[i];
-			temp = ft_col_count_calculate(&mapData, argv[i], 0);
+			return_status = ft_col_count_calculate(&mapData, argv[i], 0);
 			fd = open(argv[1], O_RDONLY);
-			if (fd == -1 || temp == 0) // Dosya açılamadı
+			if (fd == -1 || return_status == 0) // Dosya açılamadı
 			{
 				ft_puterr("map error\n");
 				i++;
 				continue ;
 			}
-		} else // standart çıktı okuma işlemleri
-		{
-			mapData.file_name = "STDIN";
-			temp = ft_col_count_calculate(&mapData, argv[i], 1);
-			fd = STDIN_FILENO;
-			if (temp == 0) // Kolon sayısı hesaplanamadı
-			{
-				ft_puterr("map error\n");
-				i++;
-				continue ;
-			}
-		}
-		printf("%d\n", mapData.col_len);
+		} 
 		// if (ft_read_map(&mapData, fd) == 0)
 		// {
 		// 	ft_puterr("map error\n");
 		// 	i++;
 		// 	continue ;
 		// }
+		printf("%d\n", mapData.col_len);
+		printf("%d\n", mapData.map_start_index);
 		close(fd);
 		i++;
+	}
+
+	if (argc == 1)
+	{
+		mapData.file_name = "STDIN";
+		return_status = ft_col_count_calculate(&mapData, argv[i], 1);
+		fd = STDIN_FILENO;
+		if (return_status == 0) // Kolon sayısı hesaplanamadı
+		{
+			ft_puterr("map error\n");
+		}
+		// if (ft_read_map(&mapData, fd) == 0)
+		// {
+		// 	ft_puterr("map error\n");
+		// 	i++;
+		// 	continue ;
+		// }
+		printf("%d\n", mapData.col_len);
+		printf("%d\n", mapData.map_start_index);
+		close(fd);
 	}
 	return 0;
 }
