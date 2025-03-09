@@ -3,35 +3,35 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void ft_reset_mapData(bsq_map_d *mapData)
+void ft_reset_mapData(bsq_map_d *map_info)
 {
 	int i;
 
-	if (mapData->map_data != NULL)
+	if (map_info->map_data != NULL)
 	{
 		i = 0;
-		while (i < mapData->line_len)
-			free(mapData->map_data[i++]);
-		free(mapData->map_data);
-		mapData->map_data = NULL;		
+		while (i < map_info->line_len)
+			free(map_info->map_data[i++]);
+		free(map_info->map_data);
+		map_info->map_data = NULL;		
 	}
 	
-	mapData->line_len = -1;
-	mapData->col_len = -1;
-	mapData->map_start_index = -1;
-	mapData->file_name = "";
-	mapData->space = '\0';
-	mapData->obstacle = '\0';
-	mapData->full = '\0';
-	mapData->map_data = NULL;		
+	map_info->line_len = -1;
+	map_info->col_len = -1;
+	map_info->map_start_index = -1;
+	map_info->file_name = "";
+	map_info->space = '\0';
+	map_info->obstacle = '\0';
+	map_info->full = '\0';
+	map_info->map_data = NULL;		
 }
 
-int	ft_check_first_line(bsq_map_d *mapData, char *first_line)
+int	ft_check_first_line(bsq_map_d *map_info, char *first_line)
 {
 	/* Kontrol edilmesi gerekenler:
 	--- karakter eksikse
 	--- iki karakter birbiriyle aynıysa
-	--- sıkıntı yoksa mapData içerisine bilgiler yazılmalı
+	--- sıkıntı yoksa map_info içerisine bilgiler yazılmalı
 	*/
 
 	int	i;
@@ -63,45 +63,107 @@ int	ft_check_first_line(bsq_map_d *mapData, char *first_line)
 	if (i != 3)
 		return (0);
 
-	mapData->line_len = line_len;
-	mapData->space = first_line[0];
-	mapData->obstacle = first_line[1];
-	mapData->full = first_line[2];
+	map_info->line_len = line_len;
+	map_info->space = first_line[0];
+	map_info->obstacle = first_line[1];
+	map_info->full = first_line[2];
 
 	return (1);
 }
 
-int	ft_read_map(bsq_map_d *mapData, int fd)
+void	ft_print_map(bsq_map_d *map_info)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (i < map_info->line_len)
+	{
+		j = 0;
+		while (j < map_info->col_len)
+			write(1, &map_info->map_data[i][j++], 1);
+		write(1, "\n", 1);
+		i++;
+	}
+}
+
+t_bool	ft_read_map(bsq_map_d *map_info, int fd)
 {
 	/* Yapılması gerekenler:
-	--- ilk 4 karakterde hata olup olmadığına bakmak ve onları mapData'ya 
-	eklemek
-	--- col sayısını bulmak
-	--- mapData içindeki map_data içerisine malloc ile dizileri oluşturup 
+	--- map_info içindeki map_data içerisine malloc ile dizileri oluşturup 
 	bilgileri içerisine girmek gerekiyor
+	--- karakterleri .ox formatına çeviyor
+	--- satır ve kolon uzunluğunu kontrol ediyor
+	--- istenmeyen bir karakter var mı kontrol ediyor
 	*/
-	int bytes_read;
-	char buffer[100];
+
+	char buffer[MAP_READ_BUFF_SIZE];
+	int rb;
 	int i;
+	int line_len;
+	int col_len;
+	t_bool is_map_started;
 
-	int line_size;
+	map_info->map_data = (char**)malloc(sizeof(char*) * map_info->line_len);
+	if (map_info == NULL)
+		exit(1);
+	i = 0;
+	while (i< map_info->line_len)
+	{
+		map_info->map_data[i] = (char*)malloc(sizeof(char) * (map_info->col_len + 1));
+		if (map_info->map_data[i] == NULL)
+			exit(1);
+		i++;
+	}
 
-	// 4 karakterden fazla olabilir satır sayısı fazla olabilir
-	// onun dışında engel karakteri falan sayı olabilir
-	bytes_read = read(fd, buffer, 4);
-	buffer[bytes_read] = '\0';
-	if (ft_check_first_line(mapData, buffer) == 0)
-		return (0);
-
-	line_size = -1;
+	is_map_started = false;
+	line_len = 0;
+	col_len = 0;
 	while (1)
 	{
-		bytes_read = read(fd, buffer, sizeof(buffer) - 1);
-		if (bytes_read <= 0)
+		rb = read(fd, buffer, sizeof(buffer) - 1);
+		if (rb <= 0)
 			break;
-		buffer[bytes_read] = '\0';
+		buffer[rb] = '\0';
 
+		i = 0;
+		while (buffer[i])
+		{
+			if (is_map_started == false && map_info->map_start_index + 1 == i)
+				is_map_started  = true;
+
+			if (is_map_started == true)
+			{
+				if (buffer[i] == '\n')
+				{
+					line_len++;
+					col_len = 0;
+					i++;
+					continue;
+				}
+
+				if (buffer[i] != map_info->full && buffer[i] != map_info->obstacle && buffer[i] != map_info->space)
+					return (false);
+
+				if (col_len > map_info->col_len)
+					return (false);
+				if (line_len > map_info->line_len)
+					return (false);
+
+				if (buffer[i] == map_info->obstacle)
+					map_info->map_data[line_len][col_len] = CHAR_OBSTACLE;
+				else if (buffer[i] == map_info->full)
+					map_info->map_data[line_len][col_len] = CHAR_FULL;
+				else if (buffer[i] == map_info->space)
+					map_info->map_data[line_len][col_len] = CHAR_SPACE;
+
+				col_len++;
+			}
+			i++;
+		}
 	}
+
+	return (true);
 }
 
 t_bool ft_check_map_chars(char full, char obstacle, char space)
@@ -115,39 +177,43 @@ t_bool ft_check_map_chars(char full, char obstacle, char space)
 		return (false);
 	if (!(space >= 32 && space <= 126))
 		return (false);
+	
+	return (true);
 }
 
-t_bool ft_read_first_line(bsq_map_d *mapData, char* buffer)
+t_bool ft_read_first_line(bsq_map_d *map_info, char* buffer)
 {
 	int i;
 	int map_line_len;
 
-	if (mapData->map_start_index < MIN_LEN_FLINE)
+	if (map_info->map_start_index < MIN_LEN_FLINE)
 		return (false);
 
-	i = mapData->map_start_index - 1;
-	mapData->full = buffer[i--];
-	mapData->obstacle = buffer[i--];
-	mapData->space = buffer[i--];
+	i = map_info->map_start_index - 1;
+	map_info->full = buffer[i--];
+	map_info->obstacle = buffer[i--];
+	map_info->space = buffer[i--];
 
-	if (ft_check_map_chars(mapData->full, mapData->obstacle, mapData->space) == false)
+	if (ft_check_map_chars(map_info->full, map_info->obstacle, map_info->space) == false)
 		return (false);
 
 	// 1234.ox
 	//    ^
 	//    i
-	mapData->line_len = 0;
+	map_info->line_len = 0;
 	map_line_len = 1;
 	while (i >= 0)
 	{
 		if (!(buffer[i] >= '0' && buffer[i] <= '9'))
 			return (false);
-		mapData->line_len += map_line_len * (buffer[i--] - '0');
+		map_info->line_len += map_line_len * (buffer[i--] - '0');
 		map_line_len *= 10;
 	}
+
+	return (true);
 }
 
-t_bool	ft_col_count_calculate(bsq_map_d *mapData ,char *file_name, int is_stdin)
+t_bool	ft_col_count_calculate(bsq_map_d *map_info ,char *file_name, int is_stdin)
 {
 	/*
 	ilk satır okunacak
@@ -175,8 +241,8 @@ t_bool	ft_col_count_calculate(bsq_map_d *mapData ,char *file_name, int is_stdin)
 	rbi = 0;
 	r_finish = false;
 	is_first = true;
-	mapData->map_start_index = 0;
-	mapData->col_len = 0;
+	map_info->map_start_index = 0;
+	map_info->col_len = 0;
 	while (!r_finish)
 	{
 		rb = read(fd, buffer, sizeof(buffer) - 1);
@@ -186,9 +252,9 @@ t_bool	ft_col_count_calculate(bsq_map_d *mapData ,char *file_name, int is_stdin)
 		while (buffer[rbi])
 		{
 			if (is_first == true && buffer[rbi] != '\n')
-				mapData->map_start_index++;
+				map_info->map_start_index++;
 			if (is_first == false && buffer[rbi] != '\n')
-				mapData->col_len++;
+				map_info->col_len++;
 			if (is_first == false && buffer[rbi] == '\n')
 			{
 				r_finish = true;
@@ -196,7 +262,7 @@ t_bool	ft_col_count_calculate(bsq_map_d *mapData ,char *file_name, int is_stdin)
 			}
 			if (buffer[rbi] == '\n' && is_first == true)
 			{
-				if (ft_read_first_line(mapData, buffer) == false)
+				if (ft_read_first_line(map_info, buffer) == false)
 					return (false);
 				is_first = false;
 			}
@@ -204,7 +270,7 @@ t_bool	ft_col_count_calculate(bsq_map_d *mapData ,char *file_name, int is_stdin)
 		}
 	}
 
-	if (mapData->col_len <= 0)
+	if (map_info->col_len <= 0)
 		return (false);
 	
 	close(fd);
@@ -213,7 +279,7 @@ t_bool	ft_col_count_calculate(bsq_map_d *mapData ,char *file_name, int is_stdin)
 
 int	main(int argc, char **argv)
 {
-	bsq_map_d mapData;
+	bsq_map_d map_info;
 	int	fd;
 	int i;
 	t_bool return_status;
@@ -224,62 +290,51 @@ int	main(int argc, char **argv)
 	test2: col=30, line=35
 	*/
 
-	mapData.map_data = NULL;
+	map_info.map_data = NULL;
 	i = 1;
 	while (i < argc)
 	{
-		ft_reset_mapData(&mapData);
+		ft_reset_mapData(&map_info);
 		if (argc > 1) // dosya okuma işlemleri
 		{
-			mapData.file_name = argv[i];
-			return_status = ft_col_count_calculate(&mapData, argv[i], 0);
+			map_info.file_name = argv[i];
+			return_status = ft_col_count_calculate(&map_info, argv[i], 0);
 			fd = open(argv[1], O_RDONLY);
-			if (fd == -1 || return_status == false) // Dosya açılamadı
+			if (fd == -1 || return_status == false ||
+				ft_read_map(&map_info, fd) == false)
 			{
 				ft_puterr("map error\n");
 				i++;
+				if (fd != -1)
+					close(fd);
 				continue ;
 			}
+			ft_print_map(&map_info);
 		} 
-		// if (ft_read_map(&mapData, fd) == 0)
-		// {
-		// 	ft_puterr("map error\n");
-		// 	i++;
-		// 	continue ;
-		// }
-		printf("%c\n", mapData.full);
-		printf("%c\n", mapData.obstacle);
-		printf("%c\n", mapData.space);
-		printf("%d\n", mapData.line_len);
+		// printf("%c\n", map_info.full);
+		// printf("%c\n", map_info.obstacle);
+		// printf("%c\n", map_info.space);
+		// printf("%d\n", map_info.line_len);
 		close(fd);
 		i++;
 	}
 
 	if (argc == 1)
 	{
-		mapData.file_name = "STDIN";
-		return_status = ft_col_count_calculate(&mapData, argv[i], 1);
+		map_info.file_name = "STDIN";
+		return_status = ft_col_count_calculate(&map_info, argv[i], 1);
 		fd = STDIN_FILENO;
-		if (return_status == false) // Kolon sayısı hesaplanamadı
+		if (return_status == false || ft_read_map(&map_info, fd) == false)
 		{
 			ft_puterr("map error\n");
+			return (0);
 		}
-		// if (ft_read_map(&mapData, fd) == 0)
-		// {
-		// 	ft_puterr("map error\n");
-		// 	i++;
-		// 	continue ;
-		// }
-		printf("%c\n", mapData.full);
-		printf("%c\n", mapData.obstacle);
-		printf("%c\n", mapData.space);
-		printf("%d\n", mapData.line_len);
+		ft_print_map(&map_info);
+		// printf("%c\n", map_info.full);
+		// printf("%c\n", map_info.obstacle);
+		// printf("%c\n", map_info.space);
+		// printf("%d\n", map_info.line_len);
 		close(fd);
 	}
-	/*
-	yanlış karakter
-	yanlış karakter sayısı
-	bozuk numara
-	*/
-	return 0;
+	return (0);
 }

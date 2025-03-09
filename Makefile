@@ -9,21 +9,24 @@ CCFLAGS = -Wall -Wextra -Werror
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	@# $(CC) $(CCFLAGS) $(OBJS) -o $(NAME)
-	@$(CC) $(OBJS) -o $(NAME)
+	@$(CC) $(CCFLAGS) $(OBJS) -o $(NAME)
+	@# $(CC) $(OBJS) -o $(NAME)
 	@echo "Derlendi!"
 
 %.o: %.c
-	@$(CC) -c $< -o $@
-	@# $(CC) -c $(CCFLAGS) $< -o $@
+	@# $(CC) -c $< -o $@
+	@$(CC) -c $(CCFLAGS) $< -o $@
 
 test: re
 	@echo "---------- Test 0 result: ---------------"
 	@./$(NAME) tests/test0.txt
+	@echo -n "\n"
 	@echo "---------- Test 1 result: ---------------"
 	@./$(NAME) tests/test1.txt
+	@echo -n "\n"
 	@echo "---------- Test 2 result: ---------------"
 	@./$(NAME) tests/test2.txt
+	@echo -n "\n"
 
 clean:
 	@rm -f $(OBJS)
