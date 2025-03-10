@@ -1,9 +1,9 @@
-SRCS = main.c extra_func.c reading.c debug.c
+SRCS = main.c extra_func.c reading.c debug.c process.c
 OBJS = $(SRCS:.c=.o)
 
 NAME = bsq
 
-CC = clang
+CC = clang # unutmaaaaaaaaa
 CCFLAGS = -g -Wall -Wextra -Werror
 
 all: $(NAME)

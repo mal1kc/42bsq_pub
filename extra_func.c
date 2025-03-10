@@ -11,6 +11,12 @@ void	ft_putchar(char c)
 	write(1, &c, 1);
 }
 
+void ft_putstr(char *str)
+{
+	while (*str)
+		write(1, str++, 1);
+}
+
 void	ft_putnbr(int nb)
 {
 	long	temp;
@@ -32,26 +38,44 @@ void	ft_putnbr(int nb)
 	}
 }
 
+int 	ft_get_step(int num)
+{
+	if (num == 0)
+		return (1);
+	int i;
+
+	i = 0;
+	while(num != 0)
+	{
+		num /= 10;
+		i++;
+	}
+	return i;
+}
+
 void	ft_print_map(bsq_map_d *map_info)
 {
 	int i;
 	int j;
+	int temp;
 
 	i = 0;
+	
 	while (i < map_info->line_len)
 	{
 		j = 0;
 		while (j < map_info->col_len)
 		{
-			write(1, " ", 1);
-			if (map_info->map_data[i][j] != -3 && map_info->map_data[i][j] != -2 && map_info->map_data[i][j] != -1)
-				ft_putnbr(map_info->map_data[i][j]);
+			temp = map_info->map_data[i][j];
+			write(1, "   ", 4 - ft_get_step(temp));
+			if (temp != -3 && temp != -2 && temp != -1)
+				ft_putnbr(temp);
 			else {
-				if (map_info->map_data[i][j] == -3)
+				if (temp == -3)
 					ft_putchar(map_info->full);
-				else if (map_info->map_data[i][j] == -2)
+				else if (temp == -2)
 					ft_putchar(map_info->obstacle);
-				else if (map_info->map_data[i][j] == -1)
+				else if (temp == -1)
 					ft_putchar(map_info->space);
 			}
 			j++;
@@ -59,4 +83,16 @@ void	ft_print_map(bsq_map_d *map_info)
 		write(1, "\n", 1);
 		i++;
 	}
+}
+
+void	ft_print_bsq(biggest_sq *bsq)
+{
+	ft_putstr("\n biggest sq: ");
+	ft_putstr("size: ");
+	ft_putnbr(bsq->size);
+	ft_putstr(" x: ");
+	ft_putnbr(bsq->x);
+	ft_putstr(" y: ");
+	ft_putnbr(bsq->y);
+	ft_putchar('\n');
 }

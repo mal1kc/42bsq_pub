@@ -130,7 +130,8 @@ t_bool	ft_read_map(bsq_map_d *map_info, int fd)
 			i++;
 		}
 	}
-
+	
+	close(fd);
 	return (true);
 }
 

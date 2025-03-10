@@ -56,15 +56,21 @@ int	main(int argc, char **argv)
 					close(fd);
 				continue ;
 			}
-			write(1, "calisti", 7);
 			print_map_data(&map_info);
 			ft_print_map(&map_info);
+			biggest_sq bsq;
+
+			bsq.size = 0;
+			bsq.x = -1;
+			bsq.y = -1;
+			process_map(&map_info, &bsq);
+			ft_print_bsq(&bsq);
+
 		} 
 		// printf("%c\n", map_info.full);
 		// printf("%c\n", map_info.obstacle);
 		// printf("%c\n", map_info.space);
 		// printf("%d\n", map_info.line_len);
-		close(fd);
 		i++;
 	}
 
@@ -76,6 +82,7 @@ int	main(int argc, char **argv)
 		if (return_status == false || ft_read_map(&map_info, fd) == false)
 		{
 			ft_puterr("map error\n");
+			close(fd);
 			return (0);
 		}
 		ft_print_map(&map_info);
@@ -83,7 +90,6 @@ int	main(int argc, char **argv)
 		// printf("%c\n", map_info.obstacle);
 		// printf("%c\n", map_info.space);
 		// printf("%d\n", map_info.line_len);
-		close(fd);
 	}
 	return (0);
 }

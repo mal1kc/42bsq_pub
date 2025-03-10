@@ -19,6 +19,13 @@ typedef struct bsq_map_d
     int **map_data;
 }	bsq_map_d;
 
+typedef struct biggest_sq
+{
+	int size;
+	int x;
+	int y;
+} biggest_sq;
+
 typedef enum t_bool
 {
     false,
@@ -35,10 +42,20 @@ t_bool ft_read_first_line(bsq_map_d *map_info, char* buffer);
 t_bool	ft_col_count_calculate(bsq_map_d *map_info ,char *file_name, int is_stdin);
 
 // extra_func
-void	ft_putnbr(int nb);
 void	ft_puterr(char *str);
-void print_map_data(const bsq_map_d *map);
 void	ft_putchar(char c);
+void ft_putstr(char *str);
+void	ft_putnbr(int nb);
+int 	ft_get_step(int num);
+void	ft_print_map(bsq_map_d *map_info);
+void	ft_print_bsq(biggest_sq *bsq);
+
+// debug.c
+void print_map_data(const bsq_map_d *map);
+
+// process.c
+t_bool	check_below(bsq_map_d *map_info, biggest_sq *temp_sq);
+void	process_map(bsq_map_d *map_info, biggest_sq *bsq);
 
 # define MIN_LEN_FLINE 4
 # define MAP_READ_BUFF_SIZE 4096
