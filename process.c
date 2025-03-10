@@ -8,6 +8,8 @@ t_bool	check_below(bsq_map_d *map_info,  biggest_sq *bsq, biggest_sq *check_sq)
 	int y;
 	int possible_size;
 
+	if (check_sq->size == 1)
+		return (true);
 	possible_size = 1;
 	i = 0;
 	x = check_sq->x;

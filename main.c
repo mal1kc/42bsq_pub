@@ -56,15 +56,18 @@ int	main(int argc, char **argv)
 					close(fd);
 				continue ;
 			}
-			print_map_data(&map_info);
-			ft_print_map(&map_info);
+			// print_map_data(&map_info);
+			// ft_debug_print_map(&map_info);
+		 
 			biggest_sq bsq;
 
 			bsq.size = 0;
 			bsq.x = -1;
 			bsq.y = -1;
 			process_map(&map_info, &bsq);
-			ft_print_bsq(&bsq);
+			// printf("Sonuç haritası: \n");
+			ft_print_map(&map_info,&bsq);
+			// ft_print_bsq(&bsq);
 
 		} 
 		// printf("%c\n", map_info.full);
@@ -85,7 +88,8 @@ int	main(int argc, char **argv)
 			close(fd);
 			return (0);
 		}
-		ft_print_map(&map_info);
+		ft_debug_print_map(&map_info);
+		// UNUTMAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 		// printf("%c\n", map_info.full);
 		// printf("%c\n", map_info.obstacle);
 		// printf("%c\n", map_info.space);

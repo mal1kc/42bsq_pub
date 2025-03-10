@@ -53,7 +53,7 @@ int 	ft_get_step(int num)
 	return i;
 }
 
-void	ft_print_map(bsq_map_d *map_info)
+void	ft_debug_print_map(bsq_map_d *map_info)
 {
 	int i;
 	int j;
