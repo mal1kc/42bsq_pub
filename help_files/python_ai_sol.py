@@ -51,7 +51,7 @@ def largest_square(map_data):
         for y in range(j - max_square_size + 1, j + 1):
             map_data[x] = map_data[x][:y] + "x" + map_data[x][y + 1 :]
 
-    return map_data
+    return map_data,max_square_pos,max_square_size
 
 
 def main():
@@ -66,11 +66,12 @@ def main():
         map_data = read_map_from_file(file_path)
 
         # Solve for the largest square and fill it with 'x'
-        result = largest_square(map_data)
+        result,res_pos,res_size = largest_square(map_data)
 
         # Output the result
         for row in result:
             print(row)
+        print(f"found biggest square with size:{res_size} at x:{res_pos[1]} y:{res_pos[0]}")
 
     except Exception as e:
         print(f"Error: {e}")
