@@ -220,6 +220,7 @@ t_bool	ft_col_count_calculate(bsq_map_d *map_info ,char *file_name, int is_stdin
 		if (rb <= 0)
 			break;
 		buffer[rb] = '\0';
+		rbi = 0;
 		while (buffer[rbi])
 		{
 			if (is_first == true && buffer[rbi] != '\n')
