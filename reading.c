@@ -130,7 +130,7 @@ t_bool	ft_read_map(bsq_map_d *map_info, int fd)
 			i++;
 		}
 	}
-	
+
 	close(fd);
 	return (true);
 }
@@ -188,9 +188,11 @@ t_bool	ft_col_count_calculate(bsq_map_d *map_info ,char *file_name, int is_stdin
 	ilk satır okunacak
 	map_start_index belirlenecek
 	kolon sayısı bulunacak
+
+
 	*/
 	int	fd;
-	char buffer[100];
+	char buffer[MAP_READ_BUFF_SIZE];
 	int rb;
 	int rbi;
 	t_bool is_first;

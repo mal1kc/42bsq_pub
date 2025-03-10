@@ -67,6 +67,7 @@ int	main(int argc, char **argv)
 			process_map(&map_info, &bsq);
 			// printf("Sonuç haritası: \n");
 			ft_print_map(&map_info,&bsq);
+			// printf("col: %d, line: %d", map_info.col_len, map_info.line_len);
 			// ft_print_bsq(&bsq);
 
 		} 
