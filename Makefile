@@ -3,8 +3,8 @@ OBJS = $(SRCS:.c=.o)
 
 NAME = bsq
 
-CC = cc
-CCFLAGS = -Wall -Wextra -Werror
+CC = clang
+CCFLAGS = -g -Wall -Wextra -Werror
 
 all: $(NAME)
 

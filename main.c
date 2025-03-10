@@ -56,6 +56,7 @@ int	main(int argc, char **argv)
 					close(fd);
 				continue ;
 			}
+			write(1, "calisti", 7);
 			print_map_data(&map_info);
 			ft_print_map(&map_info);
 		} 

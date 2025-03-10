@@ -16,7 +16,7 @@ typedef struct bsq_map_d
     char space;
     char obstacle;
     char full;
-    char **map_data;
+    int **map_data;
 }	bsq_map_d;
 
 typedef enum t_bool
@@ -25,8 +25,6 @@ typedef enum t_bool
     true
 } t_bool;
 
-void	ft_puterr(char *str);
-void print_map_data(const bsq_map_d *map);
 
 // reading functions
 int	ft_check_first_line(bsq_map_d *map_info, char *first_line);
@@ -36,11 +34,21 @@ t_bool ft_check_map_chars(char full, char obstacle, char space);
 t_bool ft_read_first_line(bsq_map_d *map_info, char* buffer);
 t_bool	ft_col_count_calculate(bsq_map_d *map_info ,char *file_name, int is_stdin);
 
+// extra_func
+void	ft_putnbr(int nb);
+void	ft_puterr(char *str);
+void print_map_data(const bsq_map_d *map);
+void	ft_putchar(char c);
+
 # define MIN_LEN_FLINE 4
 # define MAP_READ_BUFF_SIZE 4096
 
-# define CHAR_FULL 'x'
-# define CHAR_OBSTACLE 'o'
-# define CHAR_SPACE '.'
+# define CHAR_FULL -3
+# define CHAR_OBSTACLE -2
+# define CHAR_SPACE -1
+
+// # define CHAR_FULL 'x'
+// # define CHAR_OBSTACLE 'o'
+// # define CHAR_SPACE '.'
 
 #endif

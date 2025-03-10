@@ -45,22 +45,6 @@ int	ft_check_first_line(bsq_map_d *map_info, char *first_line)
 	return (1);
 }
 
-void	ft_print_map(bsq_map_d *map_info)
-{
-	int i;
-	int j;
-
-	i = 0;
-	while (i < map_info->line_len)
-	{
-		j = 0;
-		while (j < map_info->col_len)
-			write(1, &map_info->map_data[i][j++], 1);
-		write(1, "\n", 1);
-		i++;
-	}
-}
-
 t_bool	ft_read_map(bsq_map_d *map_info, int fd)
 {
 	/* Yapılması gerekenler:
@@ -77,14 +61,15 @@ t_bool	ft_read_map(bsq_map_d *map_info, int fd)
 	int line_len;
 	int col_len;
 	t_bool is_map_started;
+	int	sq_counter;
 
-	map_info->map_data = (char**)malloc(sizeof(char*) * map_info->line_len);
+	map_info->map_data = (int**)malloc(sizeof(int*) * map_info->line_len);
 	if (map_info == NULL)
 		exit(1);
 	i = 0;
 	while (i< map_info->line_len)
 	{
-		map_info->map_data[i] = (char*)malloc(sizeof(char) * (map_info->col_len + 1));
+		map_info->map_data[i] = (int*)malloc(sizeof(int) * (map_info->col_len));
 		if (map_info->map_data[i] == NULL)
 			exit(1);
 		i++;
@@ -93,6 +78,7 @@ t_bool	ft_read_map(bsq_map_d *map_info, int fd)
 	is_map_started = false;
 	line_len = 0;
 	col_len = 0;
+	sq_counter = 1;
 	while (1)
 	{
 		rb = read(fd, buffer, sizeof(buffer) - 1);
@@ -100,7 +86,7 @@ t_bool	ft_read_map(bsq_map_d *map_info, int fd)
 			break;
 		buffer[rb] = '\0';
 
-		i = 0;
+				i = 0;
 		while (buffer[i])
 		{
 			if (is_map_started == false && map_info->map_start_index + 1 == i)
@@ -112,25 +98,33 @@ t_bool	ft_read_map(bsq_map_d *map_info, int fd)
 				{
 					line_len++;
 					col_len = 0;
+					sq_counter = 1;
 					i++;
 					continue;
 				}
 
 				if (buffer[i] != map_info->full && buffer[i] != map_info->obstacle && buffer[i] != map_info->space)
 					return (false);
+				// if (buffer[i] == map_info->full)
+				// 	return (false);
 
 				if (col_len > map_info->col_len)
 					return (false);
 				if (line_len > map_info->line_len)
 					return (false);
-
+				
 				if (buffer[i] == map_info->obstacle)
+				{
 					map_info->map_data[line_len][col_len] = CHAR_OBSTACLE;
-				else if (buffer[i] == map_info->full)
-					map_info->map_data[line_len][col_len] = CHAR_FULL;
+					sq_counter = 1;
+					col_len++;
+					i++;
+					continue ;
+				}
 				else if (buffer[i] == map_info->space)
-					map_info->map_data[line_len][col_len] = CHAR_SPACE;
+					map_info->map_data[line_len][col_len] = sq_counter;
 
+				sq_counter++;
 				col_len++;
 			}
 			i++;
