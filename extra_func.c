@@ -58,11 +58,32 @@ void	ft_print_map(bsq_map_d *map_info)
 	int i;
 	int j;
 	int temp;
+	int total_step_size;
 
 	i = 0;
-	
+	total_step_size = map_info->col_len * 4;
+	j = 0;
+	ft_putstr( "      ");
+	while (j < map_info->col_len)
+	{
+		write(1, "   ", 4 - ft_get_step(j));
+		ft_putnbr(j);
+		j++;
+	}
+	ft_putchar('\n');
+	j = 0;
+	total_step_size += 6;
+	while (j < total_step_size)
+	{
+		j++;
+		ft_putchar('-');
+	}
+	ft_putchar('\n');
 	while (i < map_info->line_len)
 	{
+		ft_putnbr(i);
+		write(1, "   ", 4 - ft_get_step(i));
+		ft_putstr(" |");
 		j = 0;
 		while (j < map_info->col_len)
 		{
@@ -80,7 +101,7 @@ void	ft_print_map(bsq_map_d *map_info)
 			}
 			j++;
 		}
-		write(1, "\n", 1);
+		ft_putchar('\n');
 		i++;
 	}
 }

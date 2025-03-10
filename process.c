@@ -1,12 +1,14 @@
 #include "bsq.h"
 
-t_bool	check_below(bsq_map_d *map_info, biggest_sq *check_sq)
+t_bool	check_below(bsq_map_d *map_info,  biggest_sq *bsq, biggest_sq *check_sq)
 {
 	int i;
 	int temp;
 	int x;
 	int y;
+	int possible_size;
 
+	possible_size = 1;
 	i = 0;
 	x = check_sq->x;
 	y = check_sq->y;
@@ -16,12 +18,20 @@ t_bool	check_below(bsq_map_d *map_info, biggest_sq *check_sq)
 		if (y >= map_info->line_len)
 			return (false);
 		temp = map_info->map_data[y][x];
-		if (temp < check_sq->size)
-			return (false);
+		if (temp < check_sq->size )
+		{
+			check_sq->size = temp;
+		}
+		possible_size++;
+		if (check_sq->size == possible_size)
+		{
+			if (check_sq->size > bsq->size)
+				return (true);
+		}
 		i++;
 	}
 
-	return (true);
+	return (false);
 }
 
 void	process_map(bsq_map_d *map_info, biggest_sq *bsq)
@@ -47,10 +57,11 @@ void	process_map(bsq_map_d *map_info, biggest_sq *bsq)
 			temp_sq.size = temp;
 			temp_sq.x = x;
 			temp_sq.y = y;
-			if (check_below(map_info, &temp_sq)){
+			if (check_below(map_info, bsq, &temp_sq)){
 				bsq->size = temp_sq.size;
 				bsq->x = temp_sq.x;
 				bsq->y = temp_sq.y;
+				// ft_print_bsq(bsq);
 			}
 
 			x++;

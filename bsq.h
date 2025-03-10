@@ -54,7 +54,7 @@ void	ft_print_bsq(biggest_sq *bsq);
 void print_map_data(const bsq_map_d *map);
 
 // process.c
-t_bool	check_below(bsq_map_d *map_info, biggest_sq *temp_sq);
+t_bool	check_below(bsq_map_d *map_info,  biggest_sq *bsq, biggest_sq *check_sq);
 void	process_map(bsq_map_d *map_info, biggest_sq *bsq);
 
 # define MIN_LEN_FLINE 4
