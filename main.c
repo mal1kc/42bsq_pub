@@ -1,100 +1,126 @@
-#include "bsq.h"
+/* Yapılması gerekenler:
+1- Dosyanın açılması lazım
+	- Dosya açılmama durumunda ve diğer hata durumlarında hata mesajı
+	- Diğer bütün ana fonksiyonların yönetimi
+2- İlk satır bilgilerinin alınması lazım
+	- Eğer iki tane karakter aynıysa hata!
+	- Eğer karakter sayısı eksikse hata
+	- Karakterler basılabilir karakter mi kontrolü
+	- Eğer haritada sorun varsa map error ve sonraki harita
+3- İçeriklerin okunup, sayılar yazılması, bigest bulunması lazım
+	- Dosyanın tekrardan açılması lazım
+	- satır uzunluklarının eşitliğinin kontrolü
+	- haritanın sadece .ox'lerden oluştuğunun kontrolü
+	- Eğer haritada sorun varsa map error ve sonraki harita
+4- Sonuç ekrana yazdırılması lazım
 
-void ft_reset_mapData(bsq_map_d *map_info)
+Dosyalar:
+main.c:
+	main(),
+	ft_open_file(),
+	ft_soliton()
+ft_extra_func.c:
+	ft_reset_map_info(), 
+	ft_reset_biggest_info(), 
+	ft_puterr_and_return();
+ft_reading_first_line.c:
+debug.c:
+	ft_print_biggest_info()
+
+*/
+
+#include "ft.h"
+
+int	ft_open_file(t_bsq_map_data *map_info)
 {
-	int i;
+	int	fd;
+	int is_stdin;
+	char *file_name;
 
-	if (map_info->map_data != NULL)
-	{
-		i = 0;
-		while (i < map_info->line_len)
-			free(map_info->map_data[i++]);
-		free(map_info->map_data);
-		map_info->map_data = NULL;		
-	}
+	is_stdin = map_info->is_stdin;
+	file_name = map_info->file_name;
+	if (is_stdin)
+		fd = STDIN_FILENO;
+	else
+		fd = open(file_name, O_RDONLY);
 
-	map_info->line_len = -1;
-	map_info->col_len = -1;
-	map_info->map_start_index = -1;
-	map_info->file_name = "";
-	map_info->space = '\0';
-	map_info->obstacle = '\0';
-	map_info->full = '\0';
-	map_info->map_data = NULL;		
+	return (fd);
 }
 
-
-int	main(int argc, char **argv)
+void	ft_soliton(t_bsq_map_data *map_info, t_biggest_sq *biggest_info,
+	char *file_name, t_bool is_stdin)
 {
-	bsq_map_d map_info;
-	int	fd;
-	int i;
-	t_bool return_status;
+	int fd;
 
-	/*
-	test0: col=7, line=7
-	test1: col=30, line=35
-	test2: col=30, line=35
-	*/
-
-	map_info.map_data = NULL;
-	i = 1;
-	while (i < argc)
+	map_info->map_data = NULL;
+	ft_reset_map_info(map_info);
+	ft_reset_biggest_info(biggest_info);
+	map_info->file_name = file_name;
+	map_info->is_stdin = is_stdin;
+	fd = ft_open_file(map_info);
+	if (fd != STDIN_FILENO && fd == -1)
 	{
-		ft_reset_mapData(&map_info);
-		if (argc > 1) // dosya okuma işlemleri
-		{
-			map_info.file_name = argv[i];
-			return_status = ft_col_count_calculate(&map_info, argv[i], 0);
-			fd = open(argv[1], O_RDONLY);
-			if (fd == -1 || return_status == false ||
-				ft_read_map(&map_info, fd) == false)
-			{
-				ft_puterr("map error\n");
-				i++;
-				if (fd != -1)
-					close(fd);
-				continue ;
-			}
-			// print_map_data(&map_info);
-			// ft_debug_print_map(&map_info);
-		 
-			biggest_sq bsq;
-
-			bsq.size = 0;
-			bsq.x = -1;
-			bsq.y = -1;
-			process_map(&map_info, &bsq);
-			// printf("Sonuç haritası: \n");
-			ft_print_map(&map_info,&bsq);
-			// printf("col: %d, line: %d", map_info.col_len, map_info.line_len);
-			// ft_print_bsq(&bsq);
-
-		} 
-		// printf("%c\n", map_info.full);
-		// printf("%c\n", map_info.obstacle);
-		// printf("%c\n", map_info.space);
-		// printf("%d\n", map_info.line_len);
-		i++;
+		ft_puterr_and_return(MAP_ERROR_TEXT);
+		return ;
 	}
+	else
+	{
+		if (ft_read_first_line(map_info, fd))
+			if (ft_read_map(map_info, biggest_info))
+				ft_print_sol(map_info, biggest_info);
+		// ft_putchar('\n');
+		// ft_print_map_info(map_info, biggest_info);
+		close(fd);
+	}
+}
+
+void	ft_create_stdin_file()
+{
+	int fd_stdin;
+    int fd_outfile;
+    char buffer[BUFFER_SIZE];
+    int bytes_read;
+    int bytes_written;
+
+    fd_stdin = STDIN_FILENO;
+    fd_outfile = open(STDIN_FILE_NAME, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (fd_outfile == -1) {
+        exit(EXIT_FAILURE);
+    }
+	bytes_read = read(fd_stdin, buffer, BUFFER_SIZE);
+    while (bytes_read > 0) {
+        bytes_written = write(fd_outfile, buffer, bytes_read);
+        if (bytes_written == -1) {
+            close(fd_outfile);
+            exit(EXIT_FAILURE);
+        }
+		bytes_read = read(fd_stdin, buffer, BUFFER_SIZE);
+	}
+    if (bytes_read == -1) {
+        close(fd_outfile);
+        exit(EXIT_FAILURE);
+    }
+	close(fd_outfile);
+}
+
+int main(int argc, char **argv) {
+	t_bsq_map_data	map_info;
+	t_biggest_sq		biggest_info;
+    int				i;
 
 	if (argc == 1)
 	{
-		map_info.file_name = "STDIN";
-		return_status = ft_col_count_calculate(&map_info, argv[i], 1);
-		fd = STDIN_FILENO;
-		if (return_status == false || ft_read_map(&map_info, fd) == false)
-		{
-			ft_puterr("map error\n");
-			close(fd);
-			return (0);
-		}
-		ft_debug_print_map(&map_info);
-		// UNUTMAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-		// printf("%c\n", map_info.full);
-		// printf("%c\n", map_info.obstacle);
-		// printf("%c\n", map_info.space);
-		// printf("%d\n", map_info.line_len);
-	}
-	return (0);
+		ft_create_stdin_file();
+		ft_soliton(&map_info, &biggest_info, STDIN_FILE_NAME, false);
+    }
+	else
+	{
+        i = 1;
+        while (i < argc)
+        {
+			ft_soliton(&map_info, &biggest_info, argv[i], false);
+            i++;
+        }
+    }
+    return (0);
 }

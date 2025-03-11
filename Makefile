@@ -1,30 +1,28 @@
-SRCS = main.c extra_func.c reading.c debug.c process.c print_sol.c
+SRCS = ft_extra_func.c ft_print_sol.c ft_read_first_line.c ft_read_map.c main.c test.c
 OBJS = $(SRCS:.c=.o)
 
 NAME = bsq
 
-CC = clang # unutmaaaaaaaaa
-CCFLAGS = -g -Wall -Wextra -Werror
+CC = clang -g # UNUTMAAA
+CCFLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
 	@$(CC) $(CCFLAGS) $(OBJS) -o $(NAME)
-	@# $(CC) $(OBJS) -o $(NAME)
 	@echo "Derlendi!"
 
-%.o: %.c
-	@# $(CC) -c $< -o $@
+%.o: %.c ft.h
 	@$(CC) -c $(CCFLAGS) $< -o $@
 
 test: re
-	@./help_files/map_creater.pl 10000 10000 335 > test_input
+	@./help_files/map_creater.pl 4000 4000 50 > test_input
 	@./help_files/python_ai_sol.py test_input > python_ckt
-	# @./$(NAME) test_input > bizim_ckt
-	# @diff python_ckt bizim_ckt && echo "sonuc OK"
-	@#echo "---------- Test 0 result: ---------------"
-	@#./$(NAME) tests/test0.txt
-	@#echo ""
+	@./$(NAME) test_input > bizim_ckt
+	@diff python_ckt bizim_ckt && echo "sonuc OK"
+	# @echo "---------- Test 0 result: ---------------"
+	# @./$(NAME) tests/test2.txt
+	@echo ""
 	@#echo "---------- Test 1 result: ---------------"
 	@#./$(NAME) tests/test1.txt
 	@#echo ""
@@ -32,7 +30,10 @@ test: re
 	@#./$(NAME) tests/test2.txt
 	@#echo ""
 	@#echo "---------- Test 3 result: ---------------"
-	@#./$(NAME) tests/test3.txt
+	@#./$(NAME) < tests/test3.txt
+	@#echo ""
+	@#echo "---------- Test 4 result: ---------------"
+	@#./$(NAME) tests/test0.txt tests/test1.txt tests/test2.txt
 	@#echo ""
 
 clean:

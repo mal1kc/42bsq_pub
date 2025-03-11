@@ -23,6 +23,7 @@ typedef enum e_bool
 typedef struct s_bsq_map_data
 {
     
+	t_bool is_stdin;
     int line_len;
 	int col_len;
     int map_start_index;
@@ -31,7 +32,6 @@ typedef struct s_bsq_map_data
     char obstacle;
     char full;
     int **map_data;
-	t_bool is_stdin;
 }	t_bsq_map_data;
 
 typedef struct s_biggest_sq
