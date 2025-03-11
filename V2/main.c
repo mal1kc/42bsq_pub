@@ -58,7 +58,7 @@ void	ft_soliton(t_bsq_map_data *map_info, t_biggest_sq *biggest_info,
 	map_info->file_name = file_name;
 	map_info->is_stdin = is_stdin;
 	fd = ft_open_file(map_info);
-	if (fd == -1)
+	if (fd != STDIN_FILENO && fd == -1)
 	{
 		ft_puterr_and_return(MAP_ERROR_TEXT);
 		return ;
@@ -66,16 +66,41 @@ void	ft_soliton(t_bsq_map_data *map_info, t_biggest_sq *biggest_info,
 	else
 	{
 		if (ft_read_first_line(map_info, fd))
-			ft_read_map(map_info, biggest_info);
-		// if (ft_read_first_line(map_info, fd))
-		// 	if (ft_read_map(map_info, biggest_info))
-		// 		if (ft_print_sol(map_info, biggest_info))
-					// ; // Hiçbir şey yapma
-
-		ft_print_map_info(map_info, biggest_info);
+			if (ft_read_map(map_info, biggest_info))
+				ft_print_sol(map_info, biggest_info);
+		// ft_putchar('\n');
+		// ft_print_map_info(map_info, biggest_info);
 		close(fd);
 	}
+}
 
+void	ft_create_stdin_file()
+{
+	int fd_stdin;
+    int fd_outfile;
+    char buffer[BUFFER_SIZE];
+    int bytes_read;
+    int bytes_written;
+
+    fd_stdin = STDIN_FILENO;
+    fd_outfile = open(STDIN_FILE_NAME, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (fd_outfile == -1) {
+        exit(EXIT_FAILURE);
+    }
+	bytes_read = read(fd_stdin, buffer, BUFFER_SIZE);
+    while (bytes_read > 0) {
+        bytes_written = write(fd_outfile, buffer, bytes_read);
+        if (bytes_written == -1) {
+            close(fd_outfile);
+            exit(EXIT_FAILURE);
+        }
+		bytes_read = read(fd_stdin, buffer, BUFFER_SIZE);
+	}
+    if (bytes_read == -1) {
+        close(fd_outfile);
+        exit(EXIT_FAILURE);
+    }
+	close(fd_outfile);
 }
 
 int main(int argc, char **argv) {
@@ -85,7 +110,8 @@ int main(int argc, char **argv) {
 
 	if (argc == 1)
 	{
-		ft_soliton(&map_info, &biggest_info, "STDIN", true);
+		ft_create_stdin_file();
+		ft_soliton(&map_info, &biggest_info, STDIN_FILE_NAME, false);
     }
 	else
 	{
