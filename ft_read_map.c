@@ -38,8 +38,6 @@ void	ft_calculate_neighbors(t_bsq_map_data *map_info, t_biggest_sq *biggest_info
 t_bool	ft_write_map_data(t_bsq_map_data *map_info, t_biggest_sq *biggest_info,
 	t_location *loc, char *buffer)
 {
-	if (loc->x >= map_info->col_len || loc->y >= map_info->line_len)
-		return (false);
 	t_neighbors n;
 
 	while (*buffer)
@@ -52,6 +50,12 @@ t_bool	ft_write_map_data(t_bsq_map_data *map_info, t_biggest_sq *biggest_info,
 			loc->x = 0;
 			buffer++;
 			continue;
+		}
+		if (loc->x >= map_info->col_len || loc->y >= map_info->line_len)
+		{
+			printf("char: %c\n", *buffer);
+			printf("x: %d, y: %d\n col_len: %d, line_len: %d\n", loc->x, loc->y, map_info->col_len, map_info->line_len);
+			return (false);
 		}
 		if (ft_is_three_chars(map_info, *buffer) == false)
 			return (false);

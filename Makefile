@@ -3,7 +3,7 @@ OBJS = $(SRCS:.c=.o)
 
 NAME = bsq
 
-CC = clang -g # UNUTMAAA
+CC = gcc # UNUTMAAA
 CCFLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
@@ -16,13 +16,13 @@ $(NAME): $(OBJS)
 	@$(CC) -c $(CCFLAGS) $< -o $@
 
 test: re
-	@./help_files/map_creater.pl 4000 4000 50 > test_input
+	@./help_files/map_creater.pl 7000 7000 150 > test_input
 	@./help_files/python_ai_sol.py test_input > python_ckt
 	@./$(NAME) test_input > bizim_ckt
 	@diff python_ckt bizim_ckt && echo "sonuc OK"
 	# @echo "---------- Test 0 result: ---------------"
 	# @./$(NAME) tests/test2.txt
-	@echo ""
+	# @echo ""
 	@#echo "---------- Test 1 result: ---------------"
 	@#./$(NAME) tests/test1.txt
 	@#echo ""

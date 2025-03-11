@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdlib.h>
-#include <stdio.h>
+#include <stdio.h> // test
 
 # define MAP_ERROR_TEXT "map error\n"
 # define BUFFER_SIZE 4096
