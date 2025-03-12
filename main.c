@@ -79,16 +79,16 @@ void	ft_soliton(t_bsq_map_data *map_info, t_biggest_sq *biggest_info,
 	{
 		if (ft_read_first_line(map_info, fd))
 			if (ft_read_map(map_info, biggest_info))
-				// ft_print_sol2(map_info, biggest_info);
 				ft_print_sol(map_info, biggest_info);
+				// ft_print_sol2(map_info, biggest_info);
 				// ft_putchar('\n');
 				// ft_print_map_info(map_info, biggest_info);
-		ft_print_biggest(biggest_info);
+		// ft_print_biggest(biggest_info);
 		close(fd);
 	}
 }
 
-void	ft_create_stdin_file()
+void	ft_create_stdin_file(void)
 {
 	int fd_stdin;
     int fd_outfile;

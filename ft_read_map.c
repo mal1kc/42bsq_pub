@@ -136,6 +136,8 @@ t_bool	ft_save_map_data(t_bsq_map_data *map_info, t_biggest_sq *biggest_info, in
 	}
 	if (loc.y != map_info->line_len)
 		return (false);
+	if (map_info->ist_obs == false)
+		return (false);
 	return (true);
 }
 
