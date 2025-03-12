@@ -14,7 +14,7 @@
 
 t_bool	ft_is_three_chars(t_bsq_map_data *map_info, char c)
 {
-	if (c != map_info->space && c != map_info->obstacle && c == map_info->full)
+	if ((c != map_info->space && c != map_info->obstacle) || c == map_info->full)
 		return (false);
 	return (true);
 }

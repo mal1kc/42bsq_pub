@@ -40,7 +40,7 @@ clean:
 	@rm -f $(OBJS) test_input python_ckt bizim_ckt
 
 fclean: clean
-	@rm -f $(NAME)
+	@rm -f $(NAME) .stdin_copy_mirac_malik
 
 re: fclean all
 

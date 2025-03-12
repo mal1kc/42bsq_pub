@@ -30,6 +30,8 @@ void ft_print_sol(t_bsq_map_data *map_info, t_biggest_sq *biggest_info)
 	int	temp;
 	int i;
 	char *line_temp = (char *)malloc(sizeof(char) * (map_info->col_len + 1));
+	if (line_temp == NULL)
+		ft_print_sol2(map_info, biggest_info);
 
 	y = 0;
 	while (y < map_info->line_len)
@@ -56,6 +58,8 @@ void ft_print_sol(t_bsq_map_data *map_info, t_biggest_sq *biggest_info)
 		write(1, "\n", 1);
 		y++;
 	}
+
+	free(line_temp);
 }
 
 void ft_print_sol2(t_bsq_map_data *map_info, t_biggest_sq *biggest_info)

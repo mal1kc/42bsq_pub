@@ -64,11 +64,7 @@ t_bool	ft_write_map_data(t_bsq_map_data *map_info, t_biggest_sq *biggest_info,
 			continue;
 		}
 		if (loc->x >= map_info->col_len || loc->y >= map_info->line_len)
-		{
-			printf("char: %c\n", *buffer);
-			printf("x: %d, y: %d\n col_len: %d, line_len: %d\n", loc->x, loc->y, map_info->col_len, map_info->line_len);
 			return (false);
-		}
 		if (ft_is_three_chars(map_info, *buffer) == false)
 			return (false);
 		if (*buffer == map_info->obstacle)
@@ -90,7 +86,7 @@ t_bool	ft_map_data_malloc(t_bsq_map_data *map_info)
 
 	map_info->map_data = (int **)malloc(sizeof(int *) * map_info->line_len);
 	if (map_info->map_data == NULL)
-		return (false);
+		exit(EXIT_FAILURE);
 	y = 0;
 	while (y < map_info->line_len)
 	{
@@ -101,7 +97,7 @@ t_bool	ft_map_data_malloc(t_bsq_map_data *map_info)
 				free(map_info->map_data[y]);
 			free(map_info->map_data);
 			map_info->map_data = NULL;
-			return (false);
+			exit(EXIT_FAILURE);
 		}
 		y++;
 	}
