@@ -41,7 +41,7 @@ void	ft_calculate_neighbors(t_bsq_map_data *map_info,
 	}
 }
 
-t_bool	ft_write_map_data_helper2(t_bsq_map_data *map_info, t_biggest_sq *bqi,
+t_bool	ft_write_map_data_helper2(t_bsq_map_data *map_info,
 	t_location *loc, char buffer_char)
 {
 	if (buffer_char == map_info->obstacle)
@@ -68,9 +68,9 @@ t_bool	ft_write_map_data(t_bsq_map_data *map_info, t_biggest_sq *bqi,
 			buffer++;
 			continue ;
 		}
-		if (!ft_write_map_data_helper(map_info, bqi, *buffer, loc))
+		if (!ft_write_map_data_helper(map_info, *buffer, loc))
 			return (false);
-		if (!ft_write_map_data_helper2(map_info, bqi, loc, *buffer))
+		if (!ft_write_map_data_helper2(map_info, loc, *buffer))
 		{
 			ft_calculate_neighbors(map_info, bqi, loc, &n);
 			map_info->map_data[loc->y][loc->x] = ft_min(&n) + 1;

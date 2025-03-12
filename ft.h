@@ -110,7 +110,9 @@ t_bool		ft_map_data_malloc(t_bsq_map_data *map_info);
 
 // ft_read_helpers.c
 t_bool		ft_write_map_data_helper(t_bsq_map_data *map_info,
-				t_biggest_sq *biggest_info, char buffer_char, t_location *loc);
+				char buffer_char, t_location *loc);
+t_bool		ft_write_map_data_helper2(t_bsq_map_data *map_info,
+				t_location *loc, char buffer_char);
 t_bool		ft_save_data_helper(t_bsq_map_data *map_info,
 				t_biggest_sq *biggest_info, int fd, t_location *loc);
 

@@ -33,7 +33,7 @@ void	ft_print_sol(t_bsq_map_data *map_info, t_biggest_sq *biggest_info)
 		{
 			if (map_info->map_data[loc.y][loc.x] == 0)
 				line_temp[loc.x] = map_info->obstacle;
-			else if (ft_can_be_full(biggest_info, &loc))
+			else if (ft_is_loc_full(biggest_info, &loc))
 				line_temp[loc.x] = map_info->full;
 			else
 				line_temp[loc.x] = map_info->space;

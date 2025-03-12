@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_read_helpers.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mkokcan <mkokcan@student.42kocaeli.com.tr  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/12 17:37:33 by mkokcan           #+#    #+#             */
+/*   Updated: 2025/03/12 17:37:41 by mkokcan          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft.h"
 
 t_bool	ft_write_map_data_helper(t_bsq_map_data *map_info,
-		t_biggest_sq *biggest_info, char buffer_char, t_location *loc)
+	char buffer_char, t_location *loc)
 {
 	if (loc->x >= map_info->col_len || loc->y >= map_info->line_len)
 		return (false);
@@ -18,6 +30,7 @@ t_bool	ft_save_data_helper(t_bsq_map_data *map_info,
 	char	buffer[BUFFER_SIZE];
 	char	*temp;
 
+	is_first_line = true;
 	read_bytes = read(fd, buffer, sizeof(buffer) - 1);
 	while (read_bytes > 0)
 	{
