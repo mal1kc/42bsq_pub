@@ -69,9 +69,9 @@ def main():
         result,res_pos,res_size = largest_square(map_data)
 
         # Output the result
-        for row in result:
-            print(row)
-        # print(f"found biggest square with size:{res_size} at x:{res_pos[1]} y:{res_pos[0]}")
+        # for row in result:
+        #     print(row)
+        print(f"biggest -> size: {res_size}, x: {res_pos[1]}, y: {res_pos[0]}")
 
     except Exception as e:
         print(f"Error: {e}")

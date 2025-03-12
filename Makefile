@@ -16,9 +16,9 @@ $(NAME): $(OBJS)
 	@$(CC) -c $(CCFLAGS) $< -o $@
 
 test: re
-	@./help_files/map_creater.pl 7000 7000 150 > test_input
-	@./help_files/python_ai_sol.py test_input > python_ckt
-	@./$(NAME) test_input > bizim_ckt
+	@./help_files/map_creater.pl 1500 15000 150 > test_input
+	@time ./help_files/python_ai_sol.py test_input > python_ckt
+	@time ./$(NAME) test_input > bizim_ckt
 	@diff python_ckt bizim_ckt && echo "sonuc OK"
 	# @echo "---------- Test 0 result: ---------------"
 	# @./$(NAME) tests/test2.txt

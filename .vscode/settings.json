@@ -6,5 +6,6 @@
         "bsq.h": "c",
         "unistd.h": "c",
         "sstream": "c"
-    }
+    },
+    "makefile.configureOnOpen": true
 }
