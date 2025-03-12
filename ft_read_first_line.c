@@ -78,8 +78,8 @@ t_bool	ft_save_first_line_info(t_bsq_map_data *map_info, char *buffer)
 	return (true);
 }
 
-t_bool	ft_read_checks(t_bsq_map_data *map_info, char *buffer,
-	int i, t_bool checks[2])
+t_bool	ft_read_checks(t_bsq_map_data *map_info, char *buffer, int i,
+		t_bool checks[2])
 {
 	if (buffer[i] == '\n')
 	{

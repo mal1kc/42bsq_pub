@@ -1,19 +1,18 @@
-SRCS = ft_extra_func.c ft_print_sol.c ft_read_first_line.c ft_read_map.c main.c test.c
+SRCS = ft_allocating.c ft_extra_func.c ft_print_sol.c ft_read_first_line.c ft_read_helpers.c ft_read_map.c ft_write_funcs.c main.c
 OBJS = $(SRCS:.c=.o)
 
 NAME = bsq
 
-CC = gcc # UNUTMAAA
+CC = cc
 CCFLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	@$(CC) $(CCFLAGS) $(OBJS) -o $(NAME)
-	@echo "Derlendi!"
+	$(CC) $(CCFLAGS) $(OBJS) -o $(NAME)
 
 %.o: %.c ft.h
-	@$(CC) -c $(CCFLAGS) $< -o $@
+	$(CC) -c $(CCFLAGS) $< -o $@
 
 test: re
 	@./help_files/map_creater.pl 250 250 15 > test_input
@@ -22,10 +21,10 @@ test: re
 	@diff python_ckt bizim_ckt && echo "sonuc OK"
 
 clean:
-	@rm -f $(OBJS) test_input python_ckt bizim_ckt
+	rm -f $(OBJS)
 
 fclean: clean
-	@rm -f $(NAME) .stdin_copy_mirac_malik
+	rm -f $(NAME) .stdin_copy_mirac_malik
 
 re: fclean all
 

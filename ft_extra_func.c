@@ -16,7 +16,8 @@ t_bool	ft_is_three_chars(t_bsq_map_data *map_info, char c)
 {
 	if (c == map_info->obstacle)
 		map_info->ist_obs = true;
-	if ((c != map_info->space && c != map_info->obstacle) || c == map_info->full)
+	if ((c != map_info->space && c != map_info->obstacle)
+		|| c == map_info->full)
 		return (false);
 	return (true);
 }
@@ -35,22 +36,21 @@ int	ft_min(t_neighbors *n)
 
 void	ft_map_data_free(t_bsq_map_data *map_info)
 {
-	int i;
-	
+	int	i;
+
 	if (map_info == NULL || map_info->map_data == NULL)
 		return ;
 	i = 0;
 	while (i < map_info->line_len)
 		free(map_info->map_data[i++]);
 	free(map_info->map_data);
-	map_info->map_data = NULL;		
+	map_info->map_data = NULL;
 }
 
 void	ft_reset_map_info(t_bsq_map_data *map_info)
 {
 	ft_map_data_free(map_info);
-
-	map_info->is_stdin = false;	
+	map_info->is_stdin = false;
 	map_info->ist_obs = false;
 	map_info->line_len = 0;
 	map_info->col_len = 0;
@@ -59,7 +59,7 @@ void	ft_reset_map_info(t_bsq_map_data *map_info)
 	map_info->space = '\0';
 	map_info->obstacle = '\0';
 	map_info->full = '\0';
-	map_info->map_data = NULL;	
+	map_info->map_data = NULL;
 }
 
 void	ft_reset_biggest_info(t_biggest_sq *biggest_info)
@@ -67,12 +67,4 @@ void	ft_reset_biggest_info(t_biggest_sq *biggest_info)
 	biggest_info->size = 0;
 	biggest_info->x = -1;
 	biggest_info->y = -1;
-}
-
-t_bool	ft_puterr_and_return(char *str)
-{
-	while (*str)
-		write(2, str++, 1);
-	
-	return (false);
 }
