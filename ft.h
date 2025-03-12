@@ -20,7 +20,7 @@
 
 # define MAP_ERROR_TEXT "map error\n"
 # define BUFFER_SIZE 4096
-# define STDIN_FILE_NAME "stdin_251654.txt"
+# define STDIN_FILE_NAME ".stdin_copy_mirac_malik"
 // # define CHAR_FULL -3
 // # define CHAR_OBSTACLE -2
 // # define CHAR_SPACE -1
@@ -98,6 +98,7 @@ t_bool	ft_read_map(t_bsq_map_data *map_info, t_biggest_sq *biggest_info);
 // ft_print_sol.c
 void	ft_putchar(char c);
 void ft_print_sol(t_bsq_map_data *map_info, t_biggest_sq *biggest_info);
+void ft_print_sol2(t_bsq_map_data *map_info, t_biggest_sq *biggest_info);
 
 // test.c
 void	ft_print_map_info(t_bsq_map_data *map_info, t_biggest_sq *biggest_info);

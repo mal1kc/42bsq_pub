@@ -138,7 +138,8 @@ t_bool	ft_save_map_data(t_bsq_map_data *map_info, t_biggest_sq *biggest_info, in
 		}
 		read_bytes = read(fd, buffer, sizeof(buffer) - 1);
 	}
-
+	if (loc.y != map_info->line_len)
+		return (false);
 	return (true);
 }
 
