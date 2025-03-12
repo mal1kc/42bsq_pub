@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mkokcan <mkokcan@student.42kocaeli.com.tr  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/12 10:58:33 by mkokcan           #+#    #+#             */
+/*   Updated: 2025/03/12 10:59:07 by mkokcan          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 /* Yapılması gerekenler:
 1- Dosyanın açılması lazım
 	- Dosya açılmama durumunda ve diğer hata durumlarında hata mesajı
