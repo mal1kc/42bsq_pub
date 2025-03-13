@@ -31,7 +31,6 @@ typedef enum e_bool
 typedef struct s_bsq_map_data
 {
 	t_bool	is_stdin;
-	t_bool	ist_obs;
 	int		line_len;
 	int		col_len;
 	int		map_start_index;
