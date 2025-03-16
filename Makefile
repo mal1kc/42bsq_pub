@@ -12,7 +12,7 @@ $(NAME): $(OBJS)
 	$(CC) $(CCFLAGS) $(OBJS) -o $(NAME)
 
 test: re
-	@./help_files/map_creater.pl 50000 50000 15 > test_input
+	@./help_files/map_creater.pl 1000 1000 15 > test_input
 	@time ./$(NAME) test_input > bizim_ckt
 	# @time ./help_files/python_ai_sol.py test_input > python_ckt
 	# @diff python_ckt bizim_ckt && echo "sonuc OK"
